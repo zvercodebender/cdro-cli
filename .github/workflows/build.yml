@@ -15,7 +15,7 @@ jobs:
       - name: build
         run: ./build.sh
       - name: version
-        run: echo "::set-output name=version::$(./bin/azblogfilter --version)"
+        run: echo "::set-output name=version::${GITHUB_REF##*/}"
         id: version
       - name: release
         uses: actions/create-release@v1
