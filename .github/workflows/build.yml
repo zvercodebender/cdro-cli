@@ -17,6 +17,8 @@ jobs:
       - name: version
         run: echo "version=${GITHUB_REF##*/}" >> $GITHUB_OUTPUT
         id: version
+      - name: list-artifacts
+        run: find . -type f
 
       - uses: actions/download-artifact@v2
         with:
