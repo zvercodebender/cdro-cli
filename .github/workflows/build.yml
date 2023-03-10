@@ -17,17 +17,6 @@ jobs:
       - name: version
         run: echo "version=${GITHUB_REF##*/}" >> $GITHUB_OUTPUT
         id: version
-      - name: release
-        uses: actions/create-release@v1
-        id: create_release
-        with:
-          draft: false
-          prerelease: false
-          release_name: ${GITHUB_OUTPUT}
-          tag_name: ${{ github.ref }}
-          body_path: CHANGELOG.md
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
       - name: upload linux 386 artifact
         uses: actions/upload-release-asset@v1
         env:
