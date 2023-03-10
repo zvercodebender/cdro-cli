@@ -17,14 +17,9 @@ jobs:
       - name: version
         run: echo "version=${GITHUB_REF##*/}" >> $GITHUB_OUTPUT
         id: version
-      - name: release
-        uses: Roang-zero1/github-create-release-action@v2
-        id: create_release
-        env:
-          GITHUB_TOKEN: ${{ secrets.MYTOKEN }}
-      - name: upload artifacts
-        uses: Roang-zero1/github-upload-release-artifacts-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.MYTOKEN }}
+
+      - uses: actions/upload-artifact@v3
         with:
-          args: "./artifacts/cdro-cli-*"
+          name: my-artifact
+          path: ./artifact/ # or path/to/artifact
+
