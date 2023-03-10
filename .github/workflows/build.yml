@@ -15,7 +15,7 @@ jobs:
       - name: build
         run: ./build.sh
       - name: version
-        run: echo "::set-output name=version::${GITHUB_REF##*/}"
+        run: echo "version=${GITHUB_REF##*/}" >> $GITHUB_OUTPUT
         id: version
       - name: release
         uses: actions/create-release@v1
@@ -23,7 +23,7 @@ jobs:
         with:
           draft: false
           prerelease: false
-          release_name: ${{ steps.version.outputs.version }}
+          release_name: ${GITHUB_OUTPUT}
           tag_name: ${{ github.ref }}
           body_path: CHANGELOG.md
         env:
