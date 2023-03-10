@@ -19,7 +19,8 @@ jobs:
         id: version
 
       - uses: actions/upload-artifact@v3
+        name: artifacts
         with:
-          name: my-artifact
-          path: ./artifact/ # or path/to/artifact
+          name: artifact
+          path: ./artifacts/ # or path/to/artifact
 
