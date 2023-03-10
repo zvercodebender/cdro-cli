@@ -1,3 +1,4 @@
 config.*
 *.groovy
 artifacts/*
+cruft/*

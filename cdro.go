@@ -10,6 +10,8 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"regexp"
+	"strings"
 )
 
 type ReqType struct {
@@ -92,8 +94,31 @@ func loadFile(fileName string) (string, error) {
 		return "", err
 	}
 	script := string(scriptFile)
-	println(script)
 	return script, nil
+}
+
+/*********************************************************************************************
+ *                 Include the Script or YAML file
+ */
+func includeFile(scriptStr string) (string, error) {
+	r, _ := regexp.Compile(`(?m)@@IncludeFile: ([A-Za-z\.\\\/]+)@@`) // Pay attention, no ", instead `
+	name, _ := regexp.Compile(` .+`)
+
+	matched_strings := r.FindAllString(scriptStr, -1)
+
+	for i := range matched_strings {
+		name := name.FindString(matched_strings[i])
+		name = strings.Trim(name, "@")
+		name = strings.Trim(name, " ")
+		subScriptString, err := loadFile(name)
+		if err != nil {
+			fmt.Println(err)
+			return "", err
+		} else {
+			scriptStr = strings.Replace(scriptStr, matched_strings[i], subScriptString, 1)
+		}
+	}
+	return scriptStr, nil
 }
 
 /*********************************************************************************************
@@ -119,10 +144,15 @@ func main() {
 	}
 	scriptStr, err := loadFile(*scriptPtr)
 	if err != nil {
-		request.script = "println \"Hello world\""
-	} else {
-		request.script = scriptStr
+		fmt.Println(err)
+		os.Exit(-1)
 	}
+	scriptStr, err = includeFile(scriptStr)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(-1)
+	}
+	request.script = scriptStr
 	if *cfgPrt != "NONE" {
 		fmt.Println("load config file")
 	}
