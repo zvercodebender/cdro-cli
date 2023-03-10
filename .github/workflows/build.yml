@@ -18,9 +18,13 @@ jobs:
         run: echo "version=${GITHUB_REF##*/}" >> $GITHUB_OUTPUT
         id: version
 
-      - uses: actions/upload-artifact@v3
-        name: artifacts
+      - uses: SierraSoftworks/gh-releases@v1.0.7
+        name: public-artifacts
         with:
-          name: artifact
-          path: ./artifacts/ # or path/to/artifact
+          token: ${{ secrets.MYTOKEN }}
+          overwrite: 'true'
+          files: |
+            ./artifacts/*
+
+
 
