@@ -20,8 +20,8 @@ jobs:
 
       - uses: actions/download-artifact@v2
         with:
-          name: releases
-          path: releases/
+          name: artifacts
+          path: artifacts/
       # I would love to use @actions/upload-release-asset, but they don't
       # support wildcards in the asset path. Ref #9, #24, and #47
       - name: Upload Archives to Release
