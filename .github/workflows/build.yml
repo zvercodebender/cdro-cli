@@ -18,17 +18,12 @@ jobs:
         run: echo "version=${GITHUB_REF##*/}" >> $GITHUB_OUTPUT
         id: version
 
-      - uses: actions/checkout@master
-      - name: Create release
-        uses: Roang-zero1/github-create-release-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.MYTOKEN }}
-      - name: Upload release artifacts
-        uses: Roang-zero1/github-upload-release-artifacts-action@v2
+      - name: Upload to artifacts
+        uses: actions/upload-artifact@v2
         with:
-          args: "artifacts/"
-        env:
-          GITHUB_TOKEN: ${{ secrets.MYTOKEN }}
+          name: artifacts
+          path: artifacts/*
+
 
 
 
