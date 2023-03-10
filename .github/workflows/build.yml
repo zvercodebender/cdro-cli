@@ -18,13 +18,17 @@ jobs:
         run: echo "version=${GITHUB_REF##*/}" >> $GITHUB_OUTPUT
         id: version
 
-      - uses: SierraSoftworks/gh-releases@v1.0.7
-        name: public-artifacts
+      - uses: actions/checkout@master
+      - name: Create release
+        uses: Roang-zero1/github-create-release-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.MYTOKEN }}
+      - name: Upload release artifacts
+        uses: Roang-zero1/github-upload-release-artifacts-action@v2
         with:
-          token: ${{ secrets.MYTOKEN }}
-          overwrite: 'true'
-          files: |
-            ./artifacts/*
+          args: "releases/*"
+        env:
+          GITHUB_TOKEN: ${{ secrets.MYTOKEN }}
 
 
 
