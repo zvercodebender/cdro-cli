@@ -1,4 +1,4 @@
-name: Demo-Hello-Python
+name: CDRO-CLI Build
 on:
   push:
     tags:
