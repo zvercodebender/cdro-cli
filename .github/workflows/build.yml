@@ -29,7 +29,7 @@ jobs:
           AUTH_HEADER: "Authorization: token ${{ secrets.MYTOKEN }}"
         run: |
           UPLOAD_URL=$(echo -n $UPLOAD_URL | sed s/\{.*//g)
-          echo $UPLOAD_URL
+          echo "Upload URL: ${UPLOAD_URL}"
           for FILE in artifacts/*
           do
             echo "Uploading ${FILE}";
