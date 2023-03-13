@@ -17,29 +17,28 @@ jobs:
       - name: version
         run: echo "version=${GITHUB_REF##*/}" >> $GITHUB_OUTPUT
         id: version
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.MYTOKEN }} 
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: |
+            Changes in this Release
+            - First Change
+            - Second Change
+          draft: false
+          prerelease: false
       - name: list-artifacts
         run: find . -type f
-
-      # I would love to use @actions/upload-release-asset, but they don't
-      # support wildcards in the asset path. Ref #9, #24, and #47
-      - name: Upload Archives to Release
+      - name: Upload release artifacts
+        uses: Roang-zero1/github-upload-release-artifacts-action@v2
+        with:
+          args: "artifacts/*"
         env:
-          UPLOAD_URL: ${{ github.event.release.upload_url }}
-          API_HEADER: "Accept: application/vnd.github.v3+json"
-          AUTH_HEADER: "Authorization: token ${{ secrets.MYTOKEN }}"
-        run: |
-          UPLOAD_URL=$(echo -n $UPLOAD_URL | sed s/\{.*//g)
-          echo "Upload URL: ${UPLOAD_URL}"
-          for FILE in artifacts/*
-          do
-            echo "Uploading ${FILE}";
-            curl \
-              -H "${API_HEADER}" \
-              -H "${AUTH_HEADER}" \
-              -H "Content-Type: $(file -b --mime-type ${FILE})" \
-              --data-binary "@${FILE}" \
-              "${UPLOAD_URL}?name=$(basename ${FILE})";
-          done
+          GITHUB_TOKEN: ${{ secrets.MYTOKEN }}
 
 
 
