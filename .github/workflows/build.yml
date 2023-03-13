@@ -21,6 +21,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
+          token:  ${{ secrets.MYTOKEN }}
           files: |
             Release.md
             artifacts/cdro-cli-linux-386
