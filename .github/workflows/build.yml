@@ -22,60 +22,12 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         with:
           token:  ${{ secrets.MYTOKEN }}
+          generate_release_notes: true
           files: |
-            Release.md
             artifacts/cdro-cli-linux-386
             artifacts/cdro-cli-windows-386.exe
             artifacts/cdro-cli-windows-amd64.exe
             artifacts/cdro-cli-darwin-amd64
             artifacts/cdro-cli-darwin-arm64
             artifacts/cdro-cli-linux-amd64
-
-
-      # - name: release
-      #   uses: actions/create-release@v1
-      #   id: create_release
-      #   with:
-      #     draft: false
-      #     prerelease: false
-      #     release_name: Release ${{ github.ref }}
-      #     tag_name: ${{ github.ref }}
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.MYTOKEN }}
-      # - name: upload linux 386 artifact
-      #   uses: actions/upload-release-asset@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.MYTOKEN }}
-      #   with:
-      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
-      #     asset_path: ./artifacts/cdro-cli-linux-386
-      #     asset_name: cdro-cli-linux-386
-      #     asset_content_type: application/octet-stream
-      # - name: upload linux amd64 artifact
-      #   uses: actions/upload-release-asset@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.MYTOKEN }}
-      #   with:
-      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
-      #     asset_path: ./artifacts/cdro-cli-linux-amd64
-      #     asset_name: cdro-cli-linux-amd64
-      #     asset_content_type: application/octet-stream
-      # - name: upload darwin arm artifact
-      #   uses: actions/upload-release-asset@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.MYTOKEN }}
-      #   with:
-      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
-      #     asset_path: ./artifacts/cdro-cli-darwin-arm64
-      #     asset_name: cdro-cli-darwin-arm64
-      #     asset_content_type: application/octet-stream
-      # - name: upload windows amd64 artifact
-      #   uses: actions/upload-release-asset@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.MYTOKEN  }}
-      #   with:
-      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
-      #     asset_path: ./artifacts/cdro-cli-windows-amd64.exe
-      #     asset_name: cdro-cli-windows-amd64.exe
-      #     asset_content_type: application/octet-stream
-
+            
