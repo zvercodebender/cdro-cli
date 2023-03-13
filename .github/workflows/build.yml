@@ -33,12 +33,18 @@ jobs:
           prerelease: false
       - name: list-artifacts
         run: find . -type f
-      - name: Upload release artifacts
-        uses: Roang-zero1/github-upload-release-artifacts-action@v2
+
+      - uses: actions/upload-artifact@v2
         with:
-          args: "artifacts/*"
-        env:
-          GITHUB_TOKEN: ${{ secrets.MYTOKEN }}
+          name: cdro-cli-darwin-arm64
+          path: artifacts/cdro-cli-darwin-arm64
+
+      # - name: Upload release artifacts
+      #   uses: Roang-zero1/github-upload-release-artifacts-action@v2
+      #   with:
+      #     args: "artifacts/*"
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.MYTOKEN }}
 
 
 
