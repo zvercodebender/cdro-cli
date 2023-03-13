@@ -17,6 +17,8 @@ jobs:
       - name: version
         run: echo "version=${GITHUB_REF##*/}" >> $GITHUB_OUTPUT
         id: version
+      #######################################################
+      # https://github.com/softprops/action-gh-release
       - name: Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
@@ -30,4 +32,3 @@ jobs:
             artifacts/cdro-cli-darwin-amd64
             artifacts/cdro-cli-darwin-arm64
             artifacts/cdro-cli-linux-amd64
-            
