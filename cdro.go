@@ -70,7 +70,7 @@ func runScript(reqType ReqType) (string, error) {
  *                 Load the Config YAML file
  */
 func loadConfiguration(fileName string) (ReqType, error) {
-	configFile, err := os.ReadFile("config.json")
+	configFile, err := os.ReadFile(fileName)
 	if err != nil {
 		fmt.Println(err)
 	}
