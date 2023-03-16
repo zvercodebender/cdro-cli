@@ -139,7 +139,7 @@ func main() {
 	typePtr := flag.String("type", "groovy", "DSL or YAML files")
 	scriptPtr := flag.String("file", "ERROR", "Groovy or YAML file to run")
 	cfgPrt := flag.String("conf", "NONE", "Config file")
-	cfgTest := flag.Bool("test", false, "show script but don't apply")
+	cfgTest := flag.Bool("test", false, "don't apply")
 	cfgVerbose := flag.Bool("verbose", false, "Show extra output")
 	flag.Parse()
 

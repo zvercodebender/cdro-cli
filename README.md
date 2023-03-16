@@ -6,18 +6,22 @@ This is a lightweight command line tool to allow you to apply CDRO DSL files dir
 
 ## Usage
 
-*  `-conf` 
+*  `--conf` 
         Config file (default "NONE")
-*  `-file` 
+*  `--file` 
         Groovy or YAML file to run (default "ERROR")
-*  `-password` 
+*  `--password` 
         Password
-*  `-type` 
+*  `--type` 
         DSL or YAML files (default "groovy")
-*  `-url` 
+*  `--url` 
         CD/RO URL
-*  `-username` 
+*  `--username` 
         Username
+*  `--test`
+        Don't apply
+*  `--verbose` 
+        Show extra output
 
 ## Special File Tags
 
