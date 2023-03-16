@@ -101,7 +101,8 @@ func loadFile(fileName string) (string, error) {
  *                 Include the Script or YAML file
  */
 func includeFile(scriptStr string) (string, error) {
-	r, _ := regexp.Compile(`(?m)@@IncludeFile: ([A-Za-z\.\\\/]+)@@`) // Pay attention, no ", instead `
+	//r, _ := regexp.Compile(`(?m)@@IncludeFile: ([A-Za-z_\.\\\/]+)@@`)
+	r, _ := regexp.Compile(`(?m)@@IncludeFile: (.+)@@`)
 	name, _ := regexp.Compile(` .+`)
 
 	matched_strings := r.FindAllString(scriptStr, -1)
@@ -115,6 +116,8 @@ func includeFile(scriptStr string) (string, error) {
 			fmt.Println(err)
 			return "", err
 		} else {
+			subScriptString = strings.Replace(subScriptString, "\\", "\\\\", -1)
+			subScriptString = strings.Replace(subScriptString, "'", "\\'", -1)
 			scriptStr = strings.Replace(scriptStr, matched_strings[i], subScriptString, 1)
 		}
 	}
@@ -136,6 +139,8 @@ func main() {
 	typePtr := flag.String("type", "groovy", "DSL or YAML files")
 	scriptPtr := flag.String("file", "ERROR", "Groovy or YAML file to run")
 	cfgPrt := flag.String("conf", "NONE", "Config file")
+	cfgTest := flag.Bool("test", false, "show script but don't apply")
+	cfgVerbose := flag.Bool("verbose", false, "Show extra output")
 	flag.Parse()
 
 	request := ReqType{}
@@ -152,6 +157,11 @@ func main() {
 		fmt.Println(err)
 		os.Exit(-1)
 	}
+	if *cfgVerbose {
+		fmt.Println("===================")
+		fmt.Println(scriptStr)
+		fmt.Println("===================")
+	}
 	request.script = scriptStr
 	if *cfgPrt != "NONE" {
 		fmt.Println("load config file")
@@ -167,11 +177,13 @@ func main() {
 	}
 	request.scriptType = *typePtr
 
-	resType, err := runScript(request)
-	if err != nil {
-		log.Fatalf("ERROR: %s", err)
-	} else {
-		fmt.Println(resType)
+	if !*cfgTest {
+		resType, err := runScript(request)
+		if err != nil {
+			log.Fatalf("ERROR: %s", err)
+		} else {
+			fmt.Println(resType)
+		}
 	}
 
 }
