@@ -101,7 +101,6 @@ func loadFile(fileName string) (string, error) {
  *                 Include the Script or YAML file
  */
 func includeFile(scriptStr string) (string, error) {
-	//r, _ := regexp.Compile(`(?m)@@IncludeFile: ([A-Za-z_\.\\\/]+)@@`)
 	r, _ := regexp.Compile(`(?m)@@IncludeFile: (.+)@@`)
 	name, _ := regexp.Compile(` .+`)
 
@@ -125,6 +124,50 @@ func includeFile(scriptStr string) (string, error) {
 }
 
 /*********************************************************************************************
+ *                 Include the Script or YAML file
+ */
+func includeValues(scriptStr string, valuesList arrayFlags) (string, error) {
+	r, _ := regexp.Compile(`(?m)@@IncludeValue: (.+)@@`)
+	name, _ := regexp.Compile(` .+`)
+
+	matched_strings := r.FindAllString(scriptStr, -1)
+	for i := range matched_strings {
+		fmt.Println("valuesList ", valuesList)
+		for j := range valuesList {
+			fmt.Println("valuesList[", j, "] = ", valuesList[j])
+			myValue := strings.Split(valuesList[j], "=")
+			key := myValue[0]
+			value := myValue[1]
+
+			fmt.Println(key, " = ", value)
+
+			name := name.FindString(matched_strings[i])
+			name = strings.Trim(name, "@")
+			name = strings.Trim(name, " ")
+			fmt.Println("Looking for ", name)
+			if name == key {
+				fmt.Printf("Replace '%s' with content from '%s'\n", matched_strings[i], value)
+				scriptStr = strings.Replace(scriptStr, matched_strings[i], value, 1)
+			}
+		}
+	}
+	return scriptStr, nil
+}
+
+type arrayFlags []string
+
+func (i *arrayFlags) String() string {
+	return "my string representation"
+}
+
+func (i *arrayFlags) Set(value string) error {
+	*i = append(*i, value)
+	return nil
+}
+
+var valuesList arrayFlags
+
+/*********************************************************************************************
  *********************************************************************************************
  **
  **                       M A I N   L O O P
@@ -141,6 +184,7 @@ func main() {
 	cfgPrt := flag.String("conf", "NONE", "Config file")
 	cfgTest := flag.Bool("test", false, "don't apply")
 	cfgVerbose := flag.Bool("verbose", false, "Show extra output")
+	flag.Var(&valuesList, "value", "Some description for this param.")
 	flag.Parse()
 
 	request := ReqType{}
@@ -153,6 +197,11 @@ func main() {
 		os.Exit(-1)
 	}
 	scriptStr, err = includeFile(scriptStr)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(-1)
+	}
+	scriptStr, err = includeValues(scriptStr, valuesList)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(-1)

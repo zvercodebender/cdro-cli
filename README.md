@@ -22,6 +22,8 @@ This is a lightweight command line tool to allow you to apply CDRO DSL files dir
         Don't apply
 *  `--verbose` 
         Show extra output
+*  `--value <key>=<value>`
+        Pass values into the script to replace placeholders
 
 ## Special File Tags
 
@@ -48,6 +50,22 @@ The resulting script would be as follows:
 println "Hello Earth"
 println "Hello Mars"
 println "Hello Moon"
+```
+
+* `@@IncludeValue: <key>@@` This will be replace by `values` passed in a command line arguments with the `--values <key>=<value>` command line switch.  An example of this is as follows:
+
+```
+println "Hello World"
+println "Hello Mars"
+println "Hello @@IncludeValue: message@@"
+```
+
+user the command line switch `--value message=Bob`.  The resulting script will be as follows:
+
+```
+println "Hello World"
+println "Hello Mars"
+println "Hello Bob"
 ```
 
 ## Config File
