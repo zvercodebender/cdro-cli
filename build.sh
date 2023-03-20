@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
-mkdir artifacts
+if [ ! -d "artifacts" ]; then
+  	echo "artifacts does not exist."
+	mkdir artifacts
+fi
 package_name=cdro
 package="${package_name}.go"
 	
