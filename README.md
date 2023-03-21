@@ -1,5 +1,7 @@
 # CDRO-CLI
 
+[![Github All Releases](https://img.shields.io/github/downloads/zvercodebender/cdro-cli/total.svg)]()
+
 ## Summary
 
 This is a lightweight command line tool to allow you to apply CDRO DSL files directly from the command line on your workstation or as a part of a CI process.
