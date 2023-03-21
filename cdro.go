@@ -14,6 +14,9 @@ import (
 	"strings"
 )
 
+/*
+Configuration file structure
+*/
 type ReqType struct {
 	username   string
 	password   string
@@ -22,6 +25,9 @@ type ReqType struct {
 	scriptType string
 }
 
+/*
+RunIde structure holds the parameters that need to be sent to CD/RO for uploading and running Groovy DSL an yaml files
+*/
 type RunIde struct {
 	request string
 	dsl     string
@@ -43,10 +49,10 @@ func runScript(reqType ReqType) (string, error) {
 	client.Transport = tr
 
 	values := map[string]string{"request": "evalDsl", "format": reqType.scriptType, "dsl": reqType.script}
-	json_data, err := json.Marshal(values)
+	jsonData, err := json.Marshal(values)
 
 	u := fmt.Sprintf("%s/rest/v1.0/server/dsl", reqType.host)
-	req, err := http.NewRequest(http.MethodPost, u, bytes.NewBuffer(json_data))
+	req, err := http.NewRequest(http.MethodPost, u, bytes.NewBuffer(jsonData))
 	req.Header.Set("Content-Type", "application/json; charset=UTF-8")
 	req.SetBasicAuth(reqType.username, reqType.password)
 
@@ -104,21 +110,20 @@ func includeFile(scriptStr string) (string, error) {
 	r, _ := regexp.Compile(`(?m)@@IncludeFile: (.+)@@`)
 	name, _ := regexp.Compile(` .+`)
 
-	matched_strings := r.FindAllString(scriptStr, -1)
+	matchedStrings := r.FindAllString(scriptStr, -1)
 
-	for i := range matched_strings {
-		name := name.FindString(matched_strings[i])
+	for i := range matchedStrings {
+		name := name.FindString(matchedStrings[i])
 		name = strings.Trim(name, "@")
 		name = strings.Trim(name, " ")
 		subScriptString, err := loadFile(name)
 		if err != nil {
 			fmt.Println(err)
 			return "", err
-		} else {
-			subScriptString = strings.Replace(subScriptString, "\\", "\\\\", -1)
-			subScriptString = strings.Replace(subScriptString, "'", "\\'", -1)
-			scriptStr = strings.Replace(scriptStr, matched_strings[i], subScriptString, 1)
 		}
+		subScriptString = strings.Replace(subScriptString, "\\", "\\\\", -1)
+		subScriptString = strings.Replace(subScriptString, "'", "\\'", -1)
+		scriptStr = strings.Replace(scriptStr, matchedStrings[i], subScriptString, 1)
 	}
 	return scriptStr, nil
 }
@@ -130,8 +135,8 @@ func includeValues(scriptStr string, valuesList arrayFlags) (string, error) {
 	r, _ := regexp.Compile(`(?m)@@IncludeValue: (.+)@@`)
 	name, _ := regexp.Compile(` .+`)
 
-	matched_strings := r.FindAllString(scriptStr, -1)
-	for i := range matched_strings {
+	matchedStrings := r.FindAllString(scriptStr, -1)
+	for i := range matchedStrings {
 		fmt.Println("valuesList ", valuesList)
 		for j := range valuesList {
 			fmt.Println("valuesList[", j, "] = ", valuesList[j])
@@ -141,13 +146,13 @@ func includeValues(scriptStr string, valuesList arrayFlags) (string, error) {
 
 			fmt.Println(key, " = ", value)
 
-			name := name.FindString(matched_strings[i])
+			name := name.FindString(matchedStrings[i])
 			name = strings.Trim(name, "@")
 			name = strings.Trim(name, " ")
 			fmt.Println("Looking for ", name)
 			if name == key {
-				fmt.Printf("Replace '%s' with content from '%s'\n", matched_strings[i], value)
-				scriptStr = strings.Replace(scriptStr, matched_strings[i], value, 1)
+				fmt.Printf("Replace '%s' with content from '%s'\n", matchedStrings[i], value)
+				scriptStr = strings.Replace(scriptStr, matchedStrings[i], value, 1)
 			}
 		}
 	}
