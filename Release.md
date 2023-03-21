@@ -1,4 +1,0 @@
-# Release Notes
-
-* One
-* Two

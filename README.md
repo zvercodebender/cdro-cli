@@ -9,23 +9,23 @@ This is a lightweight command line tool to allow you to apply CDRO DSL files dir
 
 ## Usage
 
-*  `--conf` 
+* `--conf` 
         Config file (default "NONE")
-*  `--file` 
+* `--file` 
         Groovy or YAML file to run (default "ERROR")
-*  `--password` 
+* `--password` 
         Password
-*  `--type` 
+* `--type` 
         DSL or YAML files (default "groovy")
-*  `--url` 
+* `--url` 
         CD/RO URL
-*  `--username` 
+* `--username` 
         Username
-*  `--test`
+* `--test`
         Don't apply
-*  `--verbose` 
+* `--verbose` 
         Show extra output
-*  `--value <key>=<value>`
+* `--value <key>=<value>`
         Pass values into the script to replace placeholders
 
 ## Special File Tags
