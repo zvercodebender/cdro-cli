@@ -18,7 +18,7 @@ jobs:
         run: echo "version=${GITHUB_REF##*/}" >> $GITHUB_OUTPUT
         id: version
       - name: changelog
-        run: git log $(git describe --tags --abbrev=0 @^)..HEAD --color --pretty=format:'%h%Creset %Creset %s' > ${{ github.workspace }}-CHANGELOG.txt
+        run: git log $(git describe --tags --abbrev=0 @^)..HEAD --color --pretty=format:'%h - %s' > ${{ github.workspace }}-CHANGELOG.txt
         #######################################################
         # https://github.com/softprops/action-gh-release
       - name: Release
