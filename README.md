@@ -27,6 +27,8 @@ This is a lightweight command line tool to allow you to apply CDRO DSL files dir
         Show extra output
 * `--value <key>=<value>`
         Pass values into the script to replace placeholders
+* ` -output string`
+        Output file
 
 ## Special File Tags
 
