@@ -11,6 +11,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"os/user"
 	"regexp"
 	"strings"
 )
@@ -190,12 +191,24 @@ func main() {
 	cfgPrt := flag.String("conf", "NONE", "Config file")
 	cfgTest := flag.Bool("test", false, "don't apply")
 	cfgVerbose := flag.Bool("verbose", false, "Show extra output")
+	cfgOutput := flag.String("output", "", "Output file")
 	flag.Var(&valuesList, "value", "Some description for this param.")
 	flag.Parse()
 
+	user, err := user.Current()
+	if err != nil {
+		log.Fatalf(err.Error())
+	}
 	request := ReqType{}
 	if *cfgPrt != "NONE" {
-		request, _ = loadConfiguration(*cfgPrt)
+		request, err = loadConfiguration(*cfgPrt)
+		if err != nil {
+			log.Fatalf(err.Error())
+			os.Exit(-1)
+		}
+	} else {
+		cfgFile := fmt.Sprintf("%s/.cdro-cli.json", user.HomeDir)
+		request, _ = loadConfiguration(cfgFile)
 	}
 	scriptStr, err := loadFile(*scriptPtr)
 	if err != nil {
@@ -213,9 +226,7 @@ func main() {
 		os.Exit(-1)
 	}
 	if *cfgVerbose {
-		fmt.Println("===================")
 		fmt.Println(scriptStr)
-		fmt.Println("===================")
 	}
 	request.script = scriptStr
 	if *cfgPrt != "NONE" {
@@ -240,5 +251,16 @@ func main() {
 			fmt.Println(resType)
 		}
 	}
+	if *cfgOutput != "" {
+		f, err := os.Create(*cfgOutput)
+		if err != nil {
+			fmt.Println(err)
+		}
+		defer f.Close()
 
+		_, err = f.WriteString(scriptStr + "\n")
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
 }
