@@ -80,7 +80,7 @@ func runScript(reqType ReqType) (string, error) {
 func loadConfiguration(fileName string) (ReqType, error) {
 	configFile, err := os.ReadFile(fileName)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Fprintln(os.Stderr, err)
 	}
 	jsonStr2 := string(configFile)
 	var y map[string]interface{}
@@ -98,7 +98,7 @@ func loadConfiguration(fileName string) (ReqType, error) {
 func loadFile(fileName string) (string, error) {
 	scriptFile, err := os.ReadFile(fileName)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Fprintln(os.Stderr, err)
 		return "", err
 	}
 	script := string(scriptFile)
@@ -120,7 +120,7 @@ func includeFile(scriptStr string) (string, error) {
 		name = strings.Trim(name, " ")
 		subScriptString, err := loadFile(name)
 		if err != nil {
-			fmt.Println(err)
+			fmt.Fprintln(os.Stderr, err)
 			return "", err
 		}
 		subScriptString = strings.Replace(subScriptString, "\\", "\\\\", -1)
@@ -212,17 +212,17 @@ func main() {
 	}
 	scriptStr, err := loadFile(*scriptPtr)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Fprintln(os.Stderr, err)
 		os.Exit(-1)
 	}
 	scriptStr, err = includeFile(scriptStr)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Fprintln(os.Stderr, err)
 		os.Exit(-1)
 	}
 	scriptStr, err = includeValues(scriptStr, valuesList)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Fprintln(os.Stderr, err)
 		os.Exit(-1)
 	}
 	if *cfgVerbose {
@@ -254,13 +254,13 @@ func main() {
 	if *cfgOutput != "" {
 		f, err := os.Create(*cfgOutput)
 		if err != nil {
-			fmt.Println(err)
+			fmt.Fprintln(os.Stderr, err)
 		}
 		defer f.Close()
 
 		_, err = f.WriteString(scriptStr + "\n")
 		if err != nil {
-			fmt.Println(err)
+			fmt.Fprintln(os.Stderr, err)
 		}
 	}
 }
