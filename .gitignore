@@ -2,3 +2,4 @@ config.*
 *.groovy
 artifacts/*
 cruft/*
+locals
