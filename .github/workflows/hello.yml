@@ -1,4 +1,4 @@
-name: Do Something That Needs Scheduled
+name: hello
 
 on:
   repository_dispatch:
