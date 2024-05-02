@@ -78,14 +78,14 @@ func runScript(reqType ReqType) (string, error) {
  *                 Load the Config YAML file
  */
 func loadConfiguration(fileName string) (ReqType, error) {
+	config := ReqType{}
 	configFile, err := os.ReadFile(fileName)
 	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
+		log.Fatalln(err)
 	}
 	jsonStr2 := string(configFile)
 	var y map[string]interface{}
 	json.Unmarshal([]byte(jsonStr2), &y)
-	config := ReqType{}
 	config.username = fmt.Sprint(y["username"])
 	config.password = fmt.Sprint(y["password"])
 	config.host = fmt.Sprint(y["url"])
@@ -207,8 +207,13 @@ func main() {
 			os.Exit(-1)
 		}
 	} else {
-		cfgFile := fmt.Sprintf("%s/.cdro-cli.json", user.HomeDir)
-		request, _ = loadConfiguration(cfgFile)
+		if *usernamePtr == "" && *passwdPtr == "" && *urlPtr == "" {
+			cfgFile := fmt.Sprintf("%s/.cdro-cli.json", user.HomeDir)
+			request, err = loadConfiguration(cfgFile)
+			if err != nil {
+				fmt.Println("Config file not found")
+			}
+		}
 	}
 	scriptStr, err := loadFile(*scriptPtr)
 	if err != nil {
